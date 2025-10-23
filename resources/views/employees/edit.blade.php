@@ -1,4 +1,7 @@
 <h2>Edit Data Pegawai</h2>
+    @extends('layout.app')
+    @section('title', 'Daftar Pegawai')
+    @section('content')
 <form action="{{ route('employees.update', $employee->id) }}" method="POST">
     @csrf
     @method('PUT')

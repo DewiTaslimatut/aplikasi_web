@@ -4,6 +4,9 @@
     <title>Detail Pegawai</title>
 </head>
 <body>
+    @extends('layout.app')
+    @section('title', 'Daftar Pegawai')
+    @section('content')
     <h1>Detail Pegawai</h1>
     <table border="1" cellpadding="8" cellspacing="0">
         <tr>
@@ -34,6 +37,15 @@
             <th>Status</th>
             <td>{{ $employee->status }}</td>
         </tr>
+        <tr>
+            <th>Departemen</th>
+            <td>
+                @if($employee->department)
+                    {{ $employee->department->nama_departemen }}
+                @else
+                    <span class="text-danger">Departemen tidak ditemukan</span>
+                @endif
+            </td>
     </table>
 </body>
 </html>

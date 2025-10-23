@@ -3,6 +3,9 @@
 namespace App\Http\Controllers;
 
 use App\Models\Employee;
+use App\Models\Department;
+use App\Models\Attendance;
+use App\Models\Position;
 use Illuminate\Http\Request;
 
 class EmployeeController extends Controller
@@ -22,7 +25,9 @@ class EmployeeController extends Controller
      */
     public function create()
     {
-        return view('employees.create');
+       $departments = \App\Models\Department::all();
+        $positions = Position::all();
+        return view('employees.create', compact('departments', 'positions'));
     }
 
     /**
@@ -30,17 +35,12 @@ class EmployeeController extends Controller
      */
     public function store(Request $request)
     {
-        $request->validate([
-            'nama_lengkap' => 'required|string|max:255',
-            'email' => 'required|email|max:255',
-            'nomor_telepon' => 'required|string|max:20',
-            'tanggal_lahir' => 'required|date',
-            'alamat' => 'required|string|max:255',
-            'tanggal_masuk' => 'required|date',
-            'status' => 'required|string|max:50',
-        ]);
+        // Validasi dan proses penyimpanan data
+        
         Employee::create($request->all());
-        return redirect()->route('employees.index');
+        
+        // Redirect ke halaman index dengan pesan sukses
+        return redirect()->route('employees.index')->with('success', 'Data karyawan berhasil ditambahkan');
     }
 
     /**
@@ -58,7 +58,10 @@ class EmployeeController extends Controller
     public function edit(string $id)
     {
         $employee = Employee::find($id);
-        return view('employees.edit', compact('employee'));
+        $departments = Department::all(); // ← TAMBAHKAN INI
+        $positions = Position::all();     // ← TAMBAHKAN INI
+        return view('employees.edit', compact('employee', 'departments', 'positions'));
+        
     }
 
     /**
@@ -74,18 +77,13 @@ class EmployeeController extends Controller
             'alamat' => 'required|string|max:255',
             'tanggal_masuk' => 'required|date',
             'status' => 'required|string|max:50',
+            'department_id' => 'required|exists:departments,id',
+            'position_id' => 'required|exists:positions,id',
         ]);
         $employee = Employee::findOrFail($id);
-        $employee->update($request->only([
-            'nama_lengkap',
-            'email',
-            'nomor_telepon',
-            'tanggal_lahir',
-            'alamat',
-            'taggal_masuk',
-            'status',
-        ]));
-        return redirect()->route('employees.index');
+        $employee->update($request->all());
+
+        return redirect()->route('employees.index')->with('success', 'Data karyawan berhasil diperbarui!');
     }
 
     /**

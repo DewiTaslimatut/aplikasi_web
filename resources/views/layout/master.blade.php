@@ -3,13 +3,14 @@
 <head>
     <meta charset="UTF-8">
     <title>@yield('title', 'App Pegawai')</title>
+    <link rel="stylesheet" href="{{ asset('css/style.css') }}">
 </head>
 <body>
     <header>
         <h1>@yield('page-title', 'App Pegawai')</h1>
         <nav>
             <ul>
-                <li><a href="{{ url('/employee') }}">Employee</a></li>
+                <li><a href="{{ url('/employees') }}">Employee</a></li>
                 <li><a href="{{ url('/department') }}">Department</a></li>
                 <li><a href="{{ url('/attendance') }}">Attendance</a></li>
                 <li><a href="{{ url('/report') }}">Report</a></li>
